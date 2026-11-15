@@ -31,6 +31,13 @@ An image is one still frame. The score is an AI-like model screening signal, not
 
 This ZIP is for local unpacked installation. Chrome Web Store publication requires a developer account, a privacy policy, and store review; it is not included here.
 
+## Extension Configuration & Options
+
+The extension includes a built-in Options Dashboard (`options.html`):
+- **Backend Endpoint**: Configure custom or remote Trustlock analysis endpoints.
+- **Sensitivity Modes**: Toggle between Conservative, Balanced, and High sensitivity for anomaly flags.
+- **Baseline Management**: Inspect the count of learned sender profiles, export profiles to JSON, or reset the local baseline database.
+
 ## How history-based analysis works
 
 - When monitoring is enabled in an open conversation, the extension learns from incoming messages already rendered by the site. At least 10 messages are required before a behavior deviation score is shown.
