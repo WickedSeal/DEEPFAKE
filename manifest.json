@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Trustlock Message Guard",
+  "version": "0.2.0",
+  "description": "Screen unusual messages and right-click images for a local deepfake review.",
+  "permissions": ["activeTab", "scripting", "storage", "notifications", "contextMenus"],
+  "optional_host_permissions": [
+    "https://mail.google.com/*",
+    "https://web.telegram.org/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Trustlock Message Guard — click to toggle on Gmail or Telegram Web"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
