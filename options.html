@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trustlock Message Guard · Settings</title>
+    <link rel="stylesheet" href="options.css">
+    <script src="options.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="logo">
+          <div class="brand-icon">T</div>
+          <div>
+            <h1>Trustlock Message Guard</h1>
+            <p class="subtitle">Deepfake Screening & Social Engineering Defense Configuration</p>
+          </div>
+        </div>
+        <span class="version-tag">v0.3.0</span>
+      </header>
+
+      <main class="content">
+        <!-- API Endpoint Section -->
+        <section class="card">
+          <h2>Trustlock Backend API</h2>
+          <p class="card-desc">Configure the local or remote Trustlock analysis server used for image screening and live stream alerts.</p>
+          <div class="form-group">
+            <label for="apiUrl">Backend Endpoint URL</label>
+            <input type="url" id="apiUrl" placeholder="http://127.0.0.1:8000" spellcheck="false">
+            <span class="hint">Default: <code>http://127.0.0.1:8000</code>. Endpoints must be reachable from Chrome.</span>
+          </div>
+        </section>
+
+        <!-- Detection Sensitivity -->
+        <section class="card">
+          <h2>Detection Sensitivity</h2>
+          <p class="card-desc">Adjust the statistical threshold required before raising an alert on observed deviations from sender baselines.</p>
+          <div class="form-group">
+            <label for="sensitivity">Anomaly Threshold Mode</label>
+            <select id="sensitivity">
+              <option value="low">Conservative (Fewer alerts, high confidence only)</option>
+              <option value="balanced" selected>Balanced (Standard detection profile)</option>
+              <option value="high">High Sensitivity (Early warning on minor intent shifts)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="minBaseline">Minimum Baseline Messages Required</label>
+            <input type="number" id="minBaseline" min="5" max="100" value="10">
+            <span class="hint">Minimum number of historical messages needed before an alert score is shown.</span>
+          </div>
+        </section>
+
+        <!-- Notification Preferences -->
+        <section class="card">
+          <h2>Alert Notifications</h2>
+          <p class="card-desc">Manage how Trustlock notifies you of detected risks.</p>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="notifyDesktop" checked>
+              <span class="toggle-slider"></span>
+              <span class="toggle-label">Show Chrome Desktop Notifications on high deviation scores</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="notifySound">
+              <span class="toggle-slider"></span>
+              <span class="toggle-label">Play alert sound for critical urgency triggers</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- Data & Baseline Management -->
+        <section class="card">
+          <h2>Baseline Storage & Data Privacy</h2>
+          <p class="card-desc">Baselines are stored locally in Chrome storage and never contain raw message bodies, only statistical profiles.</p>
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-number" id="profileCount">0</span>
+              <span class="stat-label">Learned Sender Profiles</span>
+            </div>
+          </div>
+          <div class="button-row">
+            <button type="button" id="exportBtn" class="btn secondary">Export Baselines (JSON)</button>
+            <button type="button" id="clearBtn" class="btn danger">Clear All Stored Baselines</button>
+          </div>
+        </section>
+
+        <div class="action-footer">
+          <button type="button" id="saveBtn" class="btn primary">Save Preferences</button>
+          <span id="saveStatus" class="status-msg" aria-live="polite"></span>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
