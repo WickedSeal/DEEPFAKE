@@ -2,7 +2,15 @@
   if (window.__trustlockMessageGuard) return;
 
   const host = location.hostname;
-  const app = host === 'mail.google.com' ? 'gmail' : host === 'web.telegram.org' ? 'telegram' : null;
+  const app = host === 'mail.google.com'
+    ? 'gmail'
+    : host === 'web.telegram.org'
+    ? 'telegram'
+    : host === 'web.whatsapp.com'
+    ? 'whatsapp'
+    : (host === 'discord.com' || host === 'ptb.discord.com' || host === 'canary.discord.com')
+    ? 'discord'
+    : null;
   if (!app) return;
 
   const state = { seen: new Set(), active: true, conversation: '', latestTelegramId: 0 };
@@ -113,15 +121,103 @@
     return messages;
   }
 
+  function whatsappMessages() {
+    const candidates = [...document.querySelectorAll('div[data-id], div[role="row"]')];
+    const headerNode = document.querySelector('header [data-testid="conversation-info-header-chat-title"], header span[title]');
+    const chatTitle = clean(headerNode?.getAttribute('title') || headerNode?.innerText) || 'whatsapp-chat';
+    const messages = [];
+    const used = new Set();
+
+    for (const node of candidates) {
+      const dataId = node.getAttribute('data-id') || '';
+      const textNode = node.querySelector('.selectable-text, .copyable-text span, [class*="copyable-text"]');
+      const text = stableText(textNode || node);
+      if (!text || text.length < 2 || text.length > 15000) continue;
+
+      const isOutgoing = node.classList.contains('message-out') || dataId.startsWith('true_');
+      const prePlainText = node.querySelector('[data-pre-plain-text]')?.getAttribute('data-pre-plain-text') || '';
+      const senderMatch = prePlainText.match(/]\s*([^:]+):/);
+      const sender = clean(senderMatch?.[1] || (isOutgoing ? 'me' : chatTitle));
+      const id = dataId || `${sender}:${text.slice(0, 96)}`;
+      if (used.has(id)) continue;
+      used.add(id);
+
+      messages.push({
+        app: 'whatsapp',
+        conversation: `whatsapp:${chatTitle}`,
+        sender: sender.toLowerCase(),
+        senderLabel: sender,
+        id,
+        text,
+        outgoing: isOutgoing,
+        domIndex: messages.length,
+      });
+    }
+    messages.forEach((message, index) => { message.isLatest = index >= Math.max(0, messages.length - 3); });
+    return messages;
+  }
+
+  function discordMessages() {
+    const messageRows = [...document.querySelectorAll('li[id^="chat-messages-"], [class*="messageListItem_"]')];
+    const channelHeader = document.querySelector('h1[class*="title_"], header h1, [class*="channelName_"]');
+    const channelName = clean(channelHeader?.innerText) || 'discord-channel';
+    const messages = [];
+    const used = new Set();
+
+    for (const row of messageRows) {
+      const contentNode = row.querySelector('[id^="message-content-"], [class*="messageContent_"]');
+      const text = stableText(contentNode);
+      if (!text || text.length < 2 || text.length > 15000) continue;
+
+      const authorNode = row.querySelector('[class*="username_"], [id^="message-username-"]');
+      const sender = clean(authorNode?.innerText) || 'unknown-user';
+      const rowId = row.getAttribute('id') || contentNode?.getAttribute('id') || `${sender}:${text.slice(0, 96)}`;
+      if (used.has(rowId)) continue;
+      used.add(rowId);
+
+      const isOutgoing = Boolean(row.querySelector('[class*="currentUser_"]'));
+
+      messages.push({
+        app: 'discord',
+        conversation: `discord:${channelName}`,
+        sender: sender.toLowerCase(),
+        senderLabel: sender,
+        id: rowId,
+        text,
+        outgoing: isOutgoing,
+        domIndex: messages.length,
+      });
+    }
+    messages.forEach((message, index) => { message.isLatest = index >= Math.max(0, messages.length - 3); });
+    return messages;
+  }
+
   function collectMessages() {
-    return app === 'gmail' ? gmailMessages() : telegramMessages();
+    switch (app) {
+      case 'gmail': return gmailMessages();
+      case 'telegram': return telegramMessages();
+      case 'whatsapp': return whatsappMessages();
+      case 'discord': return discordMessages();
+      default: return [];
+    }
   }
 
   function context() {
     const messages = collectMessages();
-    const conversation = app === 'gmail' ? `gmail:${location.hash || 'inbox'}` : `telegram:${stableText(document.querySelector('header')) || 'active-chat'}`;
+    let conversationName = 'active-chat';
+    if (app === 'gmail') {
+      conversationName = `gmail:${location.hash || 'inbox'}`;
+    } else if (app === 'telegram') {
+      conversationName = `telegram:${stableText(document.querySelector('header')) || 'active-chat'}`;
+    } else if (app === 'whatsapp') {
+      const headerNode = document.querySelector('header [data-testid="conversation-info-header-chat-title"], header span[title]');
+      conversationName = `whatsapp:${clean(headerNode?.getAttribute('title') || headerNode?.innerText) || 'active-chat'}`;
+    } else if (app === 'discord') {
+      const channelHeader = document.querySelector('h1[class*="title_"], header h1');
+      conversationName = `discord:${clean(channelHeader?.innerText) || 'active-channel'}`;
+    }
     const historyCount = messages.filter((message) => !message.previewOnly).length;
-    return { app, conversation, count: messages.length, historyCount, senders: [...new Set(messages.map((message) => message.senderLabel))] };
+    return { app, conversation: conversationName, count: messages.length, historyCount, senders: [...new Set(messages.map((message) => message.senderLabel))] };
   }
 
   function keyFor(message) {

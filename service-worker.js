@@ -1,8 +1,15 @@
 const APPS = {
   gmail: { origin: 'https://mail.google.com/*', match: 'https://mail.google.com/*', title: 'Gmail' },
   telegram: { origin: 'https://web.telegram.org/*', match: 'https://web.telegram.org/*', title: 'Telegram Web' },
+  whatsapp: { origin: 'https://web.whatsapp.com/*', match: 'https://web.whatsapp.com/*', title: 'WhatsApp Web' },
+  discord: { origin: 'https://discord.com/*', match: 'https://discord.com/*', title: 'Discord Web' },
 };
-const SCRIPT_IDS = { gmail: 'trustlock-gmail-monitor', telegram: 'trustlock-telegram-monitor' };
+const SCRIPT_IDS = {
+  gmail: 'trustlock-gmail-monitor',
+  telegram: 'trustlock-telegram-monitor',
+  whatsapp: 'trustlock-whatsapp-monitor',
+  discord: 'trustlock-discord-monitor',
+};
 const MIN_BASELINE_MESSAGES = 10;
 const PROFILE_STORAGE_KEY = 'senderProfiles';
 const ENABLED_KEY = 'enabledIntegrations';
@@ -14,10 +21,11 @@ const IMAGE_MENU_ID = 'trustlock-analyze-image';
 const MAX_PROCESSED_IMAGE_BYTES = 4 * 1024 * 1024;
 
 const intentPatterns = {
-  FINANCIAL_TRANSACTION: /\b(transfer|rtgs|neft|imps|wire|payment|invoice|vendor|remit|funds|payout|paise|rakam|bhejo|bhugtan)\b/i,
-  CREDENTIAL_HARVESTING: /\b(password|otp|pin|token|credential|access key|login|auth code)\b/i,
+  FINANCIAL_TRANSACTION: /\b(transfer|rtgs|neft|imps|wire|payment|invoice|vendor|remit|funds|payout|paise|rakam|bhejo|bhugtan|usdt|crypto|wallet address)\b/i,
+  CREDENTIAL_HARVESTING: /\b(password|otp|pin|token|credential|access key|login|auth code|verification code|2fa|seed phrase|private key)\b/i,
   POLICY_BYPASS: /\b(bypass|skip protocol|don't tell|keep quiet|off the record|override|exception|kisiko mat batana|process skip|direct approval)\b/i,
-  DATA_EXFILTRATION: /\b(dump|database|export|customer list|leak|source code|backup|aadhaar|data bhejo)\b/i,
+  DATA_EXFILTRATION: /\b(dump|database|export|customer list|leak|source code|backup|aadhaar|data bhejo|internal doc)\b/i,
+  MALICIOUS_ATTACHMENT: /\b(\.exe|\.scr|\.bat|\.vbs|\.zip file|download this|open attachment|run as admin|scan qr)\b/i,
 };
 const urgencyMarkers = [
   'immediately', 'urgent', 'right now', 'emergency', 'within 10 minutes', 'before closing',
