@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Trustlock Message Guard",
-  "version": "0.2.0",
-  "description": "Screen unusual messages and right-click images for a local deepfake review.",
+  "version": "0.3.0",
+  "description": "Screen unusual messages and right-click images for deepfake and social engineering reviews.",
   "permissions": ["activeTab", "scripting", "storage", "notifications", "contextMenus"],
   "optional_host_permissions": [
     "https://mail.google.com/*",
     "https://web.telegram.org/*",
+    "https://web.whatsapp.com/*",
+    "https://discord.com/*",
     "http://127.0.0.1/*",
     "http://localhost/*"
   ],

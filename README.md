@@ -1,8 +1,15 @@
-# Trustlock Message Guard for Chrome
+# Trustlock Message Guard for Chrome (v0.3.0)
 
-Trustlock Message Guard monitors rendered messages in Gmail Web and Telegram Web. It learns a local, per-sender writing baseline from history currently loaded in the open conversation, compares newly observed messages with that baseline, and raises Chrome notifications for review signals. Alert summaries appear in the existing Trustlock **Live Stream Feed**. You can also right-click a web image and choose **Analyze image with Trustlock** to screen it with the project's still-image model.
+Trustlock Message Guard monitors rendered messages across **Gmail Web**, **Telegram Web**, **WhatsApp Web**, and **Discord Web**. It learns a local, per-sender writing baseline from history currently loaded in the open conversation, compares newly observed messages with that baseline, and raises Chrome notifications for review signals. Alert summaries appear in the existing Trustlock **Live Stream Feed**. You can also right-click a web image and choose **Analyze image with Trustlock** to screen it with the project's still-image model.
 
-## Install the ZIP
+## Supported Platforms
+
+- **Gmail Web** (`mail.google.com`)
+- **Telegram Web** (`web.telegram.org`)
+- **WhatsApp Web** (`web.whatsapp.com`)
+- **Discord Web** (`discord.com`)
+
+## Install the Extension
 
 1. Extract `Trustlock-Message-Guard.zip` to a folder.
 2. Open `chrome://extensions` in Chrome and turn on **Developer mode**.
