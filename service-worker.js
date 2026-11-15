@@ -170,6 +170,13 @@ async function notify(result) {
   await chrome.action.setBadgeBackgroundColor({ color: '#d95d39' });
 }
 
+async function getApiUrls() {
+  const data = await chrome.storage.local.get('trustlock_api_url');
+  const custom = (data.trustlock_api_url || '').trim().replace(/\/+$/, '');
+  if (custom) return [`${custom}/api/extension/events`, ...API_URLS];
+  return API_URLS;
+}
+
 async function forwardAlert(message, result) {
   if (!await chrome.permissions.contains({ origins: API_ORIGINS })) return false;
   const payload = {
@@ -182,7 +189,8 @@ async function forwardAlert(message, result) {
     baseline_messages: result.baseline_messages,
     indicators: result.indicators || [],
   };
-  for (const url of API_URLS) {
+  const urls = await getApiUrls();
+  for (const url of urls) {
     try {
       const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       return response.ok;
