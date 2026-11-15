@@ -1,0 +1,18 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archives
+*.zip
+*.tar.gz
+
+# Environment & credentials
+.env
+*.pem
+*.key
+
+# Editor / IDE settings
+.vscode/
+.idea/
+*.swp
