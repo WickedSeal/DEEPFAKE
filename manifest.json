@@ -17,7 +17,8 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Trustlock Message Guard — click to toggle on Gmail or Telegram Web"
+    "default_title": "Trustlock Message Guard",
+    "default_popup": "popup.html"
   },
   "options_ui": {
     "page": "options.html",

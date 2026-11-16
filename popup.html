@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trustlock Guard</title>
+    <link rel="stylesheet" href="popup.css">
+    <script src="popup.js" defer></script>
+  </head>
+  <body>
+    <div class="popup-container">
+      <header class="popup-header">
+        <div class="brand">
+          <div class="brand-logo">T</div>
+          <div>
+            <h2>Trustlock</h2>
+            <span class="brand-sub">Message & Image Guard</span>
+          </div>
+        </div>
+        <span class="status-pill active" id="guardStatus">ACTIVE</span>
+      </header>
+
+      <section class="status-card">
+        <div class="status-indicator">
+          <span class="dot pulse"></span>
+          <span class="status-text" id="statusDescription">Monitoring Active Communications</span>
+        </div>
+        <p class="status-detail" id="siteDetail">Supported on Gmail, Telegram, WhatsApp & Discord.</p>
+      </section>
+
+      <section class="controls-list">
+        <div class="control-row">
+          <div class="control-label">
+            <strong>Social Engineering Defense</strong>
+            <span>Screen baseline behavior anomalies</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleMonitoring" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <div class="control-label">
+            <strong>Image Deepfake Screening</strong>
+            <span>Context menu right-click screening</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleDeepfake" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <footer class="popup-footer">
+        <button type="button" id="openSettingsBtn" class="footer-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          Configure Settings
+        </button>
+      </footer>
+    </div>
+  </body>
+</html>
